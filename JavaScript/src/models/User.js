@@ -9,6 +9,10 @@ const User = seq.define("user", {
     },
     fullName: {
         type: DataTypes.STRING,
+    },
+    netBalance: {
+        type: DataTypes.INTEGER,
+        default: 0
     }
 });
 
