@@ -14,4 +14,9 @@ const GroupTransaction = seq.define("groupTransaction", {
 Group.belongsToMany(Transaction, { through: GroupTransaction });
 Transaction.belongsToMany(Group, { through: GroupTransaction });
 
+GroupTransaction.sync({alter: true}).then(() => {
+    console.log("GroupTransaction Model synced");
+});
+
+
 module.exports = GroupTransaction;

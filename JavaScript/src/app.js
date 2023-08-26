@@ -26,6 +26,8 @@ app.use(cors({
 
 
 app.use("/api", require("./routes/base"));
+app.use("/api/user", require("./routes/user"));
+app.use("/api/group", require("./routes/group"));
 
 
 module.exports = app;

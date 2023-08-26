@@ -17,4 +17,9 @@ const Transaction = seq.define("transaction", {
 Transaction.belongsTo(User, { as: 'sender', foreignKey: 'senderUserId' });
 Transaction.belongsTo(User, { as: 'recipient', foreignKey: 'recipientUserId' });
 
+Transaction.sync({alter: true}).then(() => {
+    console.log("Transaction Model synced");
+});
+
+
 module.exports = Transaction;

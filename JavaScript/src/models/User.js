@@ -1,4 +1,4 @@
-const { sq: seq } = require("../config/database");
+const { seq } = require("../config/database");
 const { DataTypes } = require("sequelize");
 
 const User = seq.define("user", {
@@ -9,14 +9,20 @@ const User = seq.define("user", {
     },
     fullName: {
         type: DataTypes.STRING,
+        allowNull: false
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
     netBalance: {
         type: DataTypes.INTEGER,
-        default: 0
+        allowNull: false,
+        defaultValue: 0
     }
 });
 
-User.sync().then(() => {
+User.sync({alter: true}).then(() => {
     console.log("User Model synced");
 });
 
