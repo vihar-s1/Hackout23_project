@@ -1,3 +1,8 @@
+/**
+ * File: /src/config/database.js
+ * Date: 26/08/2023
+ */
+
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
 

@@ -1,3 +1,8 @@
+/**
+ * File: src/models/User.js
+ * Data: 26/08/2023
+ */
+
 const { seq } = require("../config/database");
 const { DataTypes } = require("sequelize");
 
@@ -7,7 +12,7 @@ const User = seq.define("user", {
         allowNull: false,
         primaryKey: true,
     },
-    fullName: {
+    full_name: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -15,15 +20,12 @@ const User = seq.define("user", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    netBalance: {
+    net_balance: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
     }
 });
 
-User.sync({alter: true}).then(() => {
-    console.log("User Model synced");
-});
 
 module.exports = User;

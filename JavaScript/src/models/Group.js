@@ -1,3 +1,8 @@
+/**
+ * File: src/models/Group.js
+ * Data: 26/08/2023
+ */
+
 const { seq } = require("../config/database");
 const { DataTypes } = require("sequelize");
 const User = require("./User");
@@ -7,10 +12,6 @@ const Group = seq.define("group", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-});
-
-Group.sync({alter: true}).then(() => {
-    console.log("Group Model synced");
 });
 
 module.exports = Group;

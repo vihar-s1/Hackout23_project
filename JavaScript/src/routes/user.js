@@ -6,6 +6,7 @@
 const express = require("express");
 const router  = express.Router();
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
 
@@ -29,8 +30,11 @@ router.post(
             
             if (user)
                 return res.status(400).json({errors: ["User with That Email Already Exists!"]})
+
+            const salt = await bcrypt.genSalt(10);
+            const securePassword = await bcrypt.hash(password, salt);
             
-            const newUser = await User.create({email: email, fullName: name, password: password});
+            const newUser = await User.create({email: email, full_name: name, password: securePassword});
             const token = jwt.sign({userId: newUser.id}, process.env.JWT_SECRET, {expiresIn: "12h"});
 
             return res.status(201).json({success: true, authToken: token, email: newUser.email});
@@ -50,11 +54,13 @@ router.post(
         try{
             const {email , password} = req.body;
 
-            const user = User.findOne({where: {email: email}});
+            const user = await User.findOne({where: {email: email}});
             
             if (!user)
                 return res.status(400).json({errors: ["User Does Not Exist!"]})
-            else if (user.password != password)
+            
+            const passwordCompare = await bcrypt.compare(password, user.password);
+            if (!passwordCompare)
                 return res.status(400).json({errors: ["Invalid Password"]});
             
             const token = jwt.sign({userMail: user.email}, process.env.JWT_SECRET, {expiresIn: "12h"});

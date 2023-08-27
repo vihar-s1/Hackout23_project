@@ -1,6 +1,13 @@
+/**
+ * File: src/models/Transactions.js
+ * Data: 26/08/2023
+ */
+
 const { seq } = require("../config/database");
 const { DataTypes } = require("sequelize");
-const User = require("./User"); // Assuming you have a User model
+
+const User = require("./User");
+const Group = require("./Group");
 
 const Transaction = seq.define("transaction", {
     id: {
@@ -14,12 +21,9 @@ const Transaction = seq.define("transaction", {
     },
 });
 
-Transaction.belongsTo(User, { as: 'sender', foreignKey: 'senderUserId' });
-Transaction.belongsTo(User, { as: 'recipient', foreignKey: 'recipientUserId' });
-
-Transaction.sync({alter: true}).then(() => {
-    console.log("Transaction Model synced");
-});
+Transaction.belongsTo(User, { as: 'sender', foreignKey: 'sender_email' });
+Transaction.belongsTo(User, { as: 'recipient', foreignKey: 'recipient_email' });
+Transaction.belongsTo(Group, {as: 'group', foreignKey: 'groupId'});
 
 
 module.exports = Transaction;

@@ -1,3 +1,8 @@
+/**
+ * File: src/models/UserGroup.js
+ * Data: 26/08/2023
+ */
+
 const { seq } = require("../config/database");
 const { DataTypes } = require("sequelize");
 
@@ -8,10 +13,6 @@ const UserGroup = seq.define("userGroup", {});
 
 User.belongsToMany(Group, { through: UserGroup });
 Group.belongsToMany(User, { through: UserGroup });
-
-UserGroup.sync({alter: true}).then(() => {
-    console.log("UserGroup Model synced");
-});
 
 
 module.exports = UserGroup;

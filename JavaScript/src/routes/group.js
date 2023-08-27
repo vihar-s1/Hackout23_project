@@ -1,3 +1,8 @@
+/**
+ * File: src/routes/group.js
+ * Data: 26/08/2023
+ */
+
 const express = require("express");
 const fetchuser = require("../middleware/fetchuser");
 const User = require("../models/User");
@@ -11,6 +16,7 @@ router.get("/", async (req, res) => {
     return res.status(200).json({ body: req.body, query: req.query });
 });
 
+
 // PATH 1: (POST) Create Group /api/group/newgroup
 router.post("/newgroup", fetchuser, async (req, res) => {
     try {
@@ -23,39 +29,38 @@ router.post("/newgroup", fetchuser, async (req, res) => {
         let nonUserMembers = [];
 
         // adding user who created the group
-        const creator = await User.findOne({attributes:["email"], where: {email: userMail}})
-        
+        const creator = await User.findOne({
+            attributes: ["email"],
+            where: { email: userMail },
+        });
         await UserGroup.create({
             userEmail: creator.email,
-            groupId: group.id
-        })
-        console.log(req.body)
+            groupId: group.id,
+        });
+
         // adding the rest of the members
-        
-        for (var i=0; i<groupMembers.length; i++){
-            const user = await User.findOne({attributes:["email"], where: {email: groupMembers[i]}});
-    
-            if (user && user.email != creator.email){
-                try{
+        for (var i = 0; i < groupMembers.length; i++) {
+            if (groupMembers[i] != creator.email) {
+                try {
                     await UserGroup.create({
-                        userEmail: user.email,
+                        userEmail: groupMembers[i],
                         groupId: group.id,
-                    })
+                    });
+                } catch (error) {
+                    nonUserMembers.push(groupMembers[i]);
                 }
-                catch(error) { console.log(error); }
-            }
-            else{
-                nonUserMembers.push(groupMembers[i]);
             }
         }
-
-        return res
-            .status(201)
-            .json({ success: true, message: ["Group Created with Existing Members"], excluded: nonUserMembers, totalExcluded: nonUserMembers.length });
+        return res.status(201).json({ success: true });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ errors: ["Internal Server Error!"] });
     }
 });
+
+
+// PATH 2: (POST) /api/group/userbalances
+
+
 
 module.exports = router;
