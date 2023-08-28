@@ -1,5 +1,5 @@
 /**
- * File: src/models/Transactions.js
+ * File: src/models/Transaction.js
  * Data: 26/08/2023
  */
 
@@ -22,8 +22,6 @@ const Transaction = seq.define("transaction", {
 });
 
 Transaction.belongsTo(User, { as: 'sender', foreignKey: 'sender_email' });
-Transaction.belongsTo(User, { as: 'recipient', foreignKey: 'recipient_email' });
-Transaction.belongsTo(Group, {as: 'group', foreignKey: 'groupId'});
-
+Transaction.belongsTo(Group, { as: 'group', foreignKey: 'groupId' });
 
 module.exports = Transaction;

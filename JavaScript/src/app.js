@@ -1,6 +1,6 @@
 /**
  * File: app.js
- * Data: 26/08/2023
+ * Date: 26/08/2023
  */
 
 const express = require('express');
@@ -25,10 +25,9 @@ app.use(cors({
 }));
 
 
-app.use("/api", require("./routes/base"));
-app.use("/api/user", require("./routes/user"));
-app.use("/api/group", require("./routes/group"));
-app.use("/api/transaction", require("./routes/transaction"));
+// app.use("/api/user", require("./routes/user"));
+// app.use("/api/group", require("./routes/group"));
+// app.use("/api/transaction", require("./routes/transaction"));
 
 
 module.exports = app;

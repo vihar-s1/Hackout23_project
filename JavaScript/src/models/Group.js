@@ -5,9 +5,13 @@
 
 const { seq } = require("../config/database");
 const { DataTypes } = require("sequelize");
-const User = require("./User");
 
 const Group = seq.define("group", {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
