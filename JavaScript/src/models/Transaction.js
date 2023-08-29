@@ -21,7 +21,7 @@ const Transaction = seq.define("transaction", {
     },
 });
 
-Transaction.belongsTo(User, { as: 'sender', foreignKey: 'sender_email' });
+Transaction.belongsTo(User, { as: 'sender', foreignKey: 'payer_email' });
 Transaction.belongsTo(Group, { as: 'group', foreignKey: 'groupId' });
 
 module.exports = Transaction;
