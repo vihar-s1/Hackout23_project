@@ -41,7 +41,9 @@ router.post(
             return res.status(201).json({success: true, authToken: token, userEmail: email});
         }
         catch (error){
-            console.log(error);
+            console.log(error.name)
+            console.log(error.message)
+            console.log("________________________________")
             return res.status(500).json({success: false, errors: ["Internal Server Error!"]});
         }
     }
@@ -69,7 +71,9 @@ router.post(
             res.status(200).json({ success: true, authToken: token, email: email });
         }
         catch (error) {
-            console.log(error);
+            console.log(error.name)
+            console.log(error.message)
+            console.log("________________________________")
             res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }
@@ -92,7 +96,9 @@ router.get(
                 res.status(401).json({ success: false, errors: ["User with that Email does not exist!"]  });
         } 
         catch (error) {
-            console.log(error);
+            console.log(error.name)
+            console.log(error.message)
+            console.log("________________________________")
             res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }
@@ -117,7 +123,9 @@ router.put(
             res.status(200).json({ success: true, message: 'Profile updated' });
         }
         catch (error) {
-            console.log(error);
+            console.log(error.name)
+            console.log(error.message)
+            console.log("________________________________")
             res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }
@@ -148,7 +156,9 @@ router.put(
             res.status(200).json({ success: true, message: 'Password updated' });
         }
         catch (error) {
-            console.log(error);
+            console.log(error.name)
+            console.log(error.message)
+            console.log("________________________________")
             res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }

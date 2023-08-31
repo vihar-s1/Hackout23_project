@@ -19,7 +19,7 @@ const authenticateToken = (req, res, next)=>{
         next();
     }
     catch(error){
-        console.log(error);
+        console.log(JSON.stringify(error));
         return res.status(401).send({errors: ["Unauthorized Action!"]});
     }
 }

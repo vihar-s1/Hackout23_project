@@ -34,7 +34,8 @@ async function executeSQLFilesInFolder(folderPath) {
             await sequelize.query(sql);
             console.log(`File ${file} executed successfully.`);
         } catch (error) {
-            console.error(`Error executing ${file}:`, error);
+            console.log(`Error executing ${file}`);
+            console.log(JSON.stringify(error));
         }
     }
 }
