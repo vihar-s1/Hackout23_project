@@ -93,7 +93,7 @@ router.get(
             if (user) // User with that email exists
                 res.status(200).json({ success: true, user: user });
             else // user with that email does not exists
-                res.status(401).json({ success: false, errors: ["User with that Email does not exist!"]  });
+                res.status(404).json({ success: false, errors: ["User Not Found"]  });
         } 
         catch (error) {
             console.log(error.name)
@@ -156,6 +156,31 @@ router.put(
             res.status(200).json({ success: true, message: 'Password updated' });
         }
         catch (error) {
+            console.log(error.name)
+            console.log(error.message)
+            console.log("________________________________")
+            res.status(500).json({ success: false, errors: ['Internal Server Error'] });
+        }
+    }
+);
+
+
+// PATH 6: (DELETE) /api/user/delete
+router.delete(
+    "/delete",
+    authenticateToken,
+    async (req, res) => {
+        try {
+            const email = req.user.email;
+            const user = await User.findByPk(email);
+
+            if (!user)
+                return res.status(404).json({success: false, errors: ["User Not Found", email]});
+            
+            await user.destroy();
+            return res.status(200).json({success: true, message: ["User Deleted"]})
+        }
+        catch (error){
             console.log(error.name)
             console.log(error.message)
             console.log("________________________________")

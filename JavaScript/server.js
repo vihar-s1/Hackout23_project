@@ -11,7 +11,7 @@ const UserGroup = require("./src/models/UserGroup");
 const Transactions = require("./src/models/Transaction");
 const TransactionRecipient = require("./src/models/TransactionRecipient");
 
-const { connectToDB, createFunctionsAndTriggers } = require("./src/config/database");
+const { connectToDB, createTriggers } = require("./src/config/database");
 
 const port = process.env.PORT || 8000;
 
@@ -27,9 +27,10 @@ app.listen(port, async () => {
         });
     }
 
-    /************** CREATING FUNCTIONS AND TRIGGER **************/
-    createFunctionsAndTriggers().then(() => {
-        console.log("functions and trigger created successfully");
+    /********************* CREATING TRIGGER *********************/
+    console.log("------------------------------------------------")
+    createTriggers().then(() => {
+        console.log("TRIGGERS CREATED SUCCESSFULLY");
     }).catch((error) => {
         console.log(error);
     })

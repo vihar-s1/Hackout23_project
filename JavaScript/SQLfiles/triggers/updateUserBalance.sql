@@ -1,6 +1,6 @@
--------------------------------------------------------
--------- Update User Balances trigger function --------
--------------------------------------------------------
+--------------------------------------------------------
+--------- Update User Balance trigger function ---------
+--------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION update_user_balances()
 RETURNS TRIGGER AS
@@ -23,3 +23,12 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+--------------------------------------------------------
+-------------- Update User Balance Trigger -------------
+--------------------------------------------------------
+
+CREATE OR REPLACE TRIGGER update_user_balances_trigger
+AFTER INSERT ON "transactions"
+FOR EACH ROW
+EXECUTE FUNCTION update_user_balances();

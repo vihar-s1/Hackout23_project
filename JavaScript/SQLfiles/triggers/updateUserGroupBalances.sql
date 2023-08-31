@@ -1,6 +1,6 @@
--------------------------------------------------------
--------- Update User Group Balances trigger function --------
--------------------------------------------------------
+------------------------------------------------------
+----- Update User Group Balance trigger function -----
+------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION update_user_group_balance()
 RETURNS TRIGGER AS
@@ -25,3 +25,14 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+
+-------------------------------------------------------
+---------- Update User Group Balance Trigger ----------
+-------------------------------------------------------
+
+CREATE OR REPLACE TRIGGER update_user_group_balance_trigger
+AFTER INSERT ON "transactions"
+FOR EACH ROW
+EXECUTE FUNCTION update_user_group_balance();
+
