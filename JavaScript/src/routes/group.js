@@ -52,6 +52,7 @@ router.post(
             console.log(error.name)
             console.log(error.message)
             console.log("________________________________")
+            await transaction.rollback();
             return res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }
@@ -66,10 +67,16 @@ router.get(
         try {
             const groupId = req.params.groupId;
 
-            // fetching users belonging to the group
-            const isValidRequest = await UserGroup.findOne({where: {userEmail: req.user.email, groupId}});
+            // start a transaction to ensure data consistency
+            const transaction = await seq.transaction();
 
-            if (!isValidRequest) return res.status(401).json({success: false, errors: ["Unauthorized Action!"]})
+            // fetching users belonging to the group
+            const isValidRequest = await UserGroup.findOne({where: {userEmail: req.user.email, groupId}, transaction});
+
+            if (!isValidRequest) {
+                await transaction.rollback();
+                return res.status(401).json({success: false, errors: ["Unauthorized Action!"]})
+            }
 
             const group = await Group.findByPk(groupId, {
                 include: [{
@@ -77,18 +84,23 @@ router.get(
                     as: "members",
                     attributes: {exclude: ["password", "createdAt", "updatedAt"]}
                 }],
-                attributes: {exclude: ["createdAt", "updatedAt"]}
+                attributes: {exclude: ["createdAt", "updatedAt"]},
+                transaction: transaction
             });
     
             if (!group) {
+                await transaction.rollback();
                 return res.status(404).json({ success: false, errors: ['Group not found'] });
             }
-    
-            res.json({ success: true, data: group});
+            
+            // commit transaction
+            await transaction.commit();
+            res.status(200).json({ success: true, data: group});
         } catch (error) {
             console.log(error.name)
             console.log(error.message)
             console.log("________________________________")
+            await transaction.rollback();
             return res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }
@@ -104,27 +116,37 @@ router.put(
             const groupId = req.params.groupId;
             const { name } = req.body;
             
-            const group = await Group.findByPk(groupId);
-            if (!group)
+            // start a transaction to ensure data consistency
+            const transaction = await seq.transaction();
+
+            const group = await Group.findByPk(groupId, {transaction});
+            if (!group){
+                await transaction.rollback();
                 return res.status(404).json({ success: false, errors: ['Group not found'] });
+            }
             
             const isValidMember = await UserGroup.findOne({
                 where: {
                     userEmail: req.user.email,
                     groupId: groupId,
-                }
+                },
+                transaction: transaction
             });
             
-            if (!isValidMember)
+            if (!isValidMember){
+                await transaction.rollback();
                 return res.status(401).json({ success: false, errors: ['Unauthorized Access!'] });
+            }
 
-            await group.update({ name });
+            await group.update({ name }, {transaction});
 
+            await transaction.commit();
             return res.status(200).json({ success: true, message: 'Group details updated' });
         } catch (error) {
             console.log(error.name)
             console.log(error.message)
             console.log("________________________________")
+            await transaction.rollback();
             return res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }
@@ -138,21 +160,34 @@ router.delete(
     async (req, res) => {
         try {
             const groupId = req.params.groupId;
-            const group = await Group.findByPk(groupId);
 
-            if (!group)
+            // start a transaction to ensure data consistency
+            const transaction = await seq.transaction();
+
+            const group = await Group.findByPk(groupId, {transaction});
+
+            if (!group){
+                await transaction.rollback();
                 return res.status(404).json({ success: false, errors: ['Group not found'] });
+            }
 
-            const isValidMember = await UserGroup.findOne({where: {userEmail: req.user.email, groupId}});
-            if (!isValidMember)
+            const isValidMember = await UserGroup.findOne({where: {userEmail: req.user.email, groupId}, transaction: transaction});
+            if (!isValidMember){
+                await transaction.rollback();
                 return res.status(401).json({ success: false, errors: ["Unauthorized Action!"] });
+            }
 
-            await group.destroy();
-
+            await group.destroy({transaction});
+            
+            // commit the transaction
+            await transaction.commit();
             return res.json({ success: true, message: 'Group deleted' });
         }
         catch (error) {
-            console.log(error);
+            console.log(error.name)
+            console.log(error.message)
+            console.log("________________________________")
+            await transaction.rollback();
             return res.status(500).json({ success: false, errors: ['Internal Server Error'] });
         }
     }

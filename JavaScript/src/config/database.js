@@ -32,10 +32,11 @@ async function executeSQLFilesInFolder(folderPath) {
         try {
             const sql = fs.readFileSync(filePath, 'utf-8');
             await sequelize.query(sql);
-            console.log(`File ${file} executed successfully.`);
+            console.log(`Executed file ${file} successfully`);
         } catch (error) {
             console.log(`Error executing ${file}`);
-            console.log(JSON.stringify(error));
+            console.log(error.name);
+            console.log(error.message);
         }
     }
 }
