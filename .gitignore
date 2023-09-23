@@ -1,40 +1,5 @@
-# Spring Boot target directory
-target/
+# nodeJS related files
+node_modules
 
-# Compiled class file
-*.class
-
-# IntelliJ IDEA project files
-.idea/
-
-# Eclipse project files
-.classpath
-.project
-.settings/
-
-# Maven build files
-mvnw
-mvnw.cmd
-.mvn/
-
-# Gradle build files
-gradle/
-build/
-
-# Spring Boot application properties
-/application.properties
-
-# Log files
-*.log
-
-# Temporary files
-*.tmp
-*.swp
-*~
-
-# Compiled Jar files
-*.jar
-
-# IDE-specific files
-*.iml
-.vscode/
+# environment files
+.env
