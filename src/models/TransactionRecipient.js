@@ -9,7 +9,12 @@ const { DataTypes } = require("sequelize");
 const User = require("./User");
 const Transaction = require("./Transaction");
 
-const TransactionRecipient = seq.define("transactionRecipient", {});
+const TransactionRecipient = seq.define("transactionRecipient", {
+    received_amount: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+});
 
 Transaction.belongsToMany(User, { through: TransactionRecipient, as: 'recipients' });
 

@@ -27,7 +27,7 @@ app.use(cors({
 
 app.use("/api/user", require("./routes/user"));
 app.use("/api/group", require("./routes/group"));
-// app.use("/api/transaction", require("./routes/transaction"));
+app.use("/api/transaction", require("./routes/transaction"));
 
 
 module.exports = app;

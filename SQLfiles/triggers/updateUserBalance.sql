@@ -9,9 +9,18 @@ BEGIN
     -- Update payer's balance (increment)
     -- since payer paid, the recipients owes to payer
     IF NEW."payer_email" IS NOT NULL THEN
-        UPDATE users
+        UPDATE "users"
         SET "net_balance" = "net_balance" + NEW."amount"
         WHERE "email" = NEW."payer_email";
+    END IF;
+
+    IF NEW."groupId" IS NOT NULL THEN
+        -- Update sender's balance in UserGroup (increment)
+        IF NEW."payer_email" IS NOT NULL THEN
+            UPDATE "UserGroup"
+            SET "net_balance" = "net_balance" + NEW."amount"
+            WHERE "userEmail" = NEW."payer_email" AND "groupId" = NEW."groupId";
+        END IF;
     END IF;
     RETURN NEW;
 END;
