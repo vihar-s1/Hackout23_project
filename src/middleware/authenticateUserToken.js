@@ -6,7 +6,7 @@
 var jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const authenticateToken = (req, res, next)=>{
+const authenticateUserToken = (req, res, next)=>{
     // Get the user from JWT token and add id to req object
     const token = req.header('authToken');
     if (!token){
@@ -24,4 +24,4 @@ const authenticateToken = (req, res, next)=>{
     }
 }
 
-module.exports = authenticateToken;
+module.exports = authenticateUserToken;

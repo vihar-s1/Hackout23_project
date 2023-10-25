@@ -31,70 +31,55 @@ A step-by-step guide on how to install and configure your project:
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/vihar-s1/Splitwise-Backend-Clone.git
-cd Splitwise-Backend-Clone
-```
+    ```bash
+    git clone https://github.com/vihar-s1/Splitwise-Backend-Clone.git
+    cd Splitwise-Backend-Clone
+    ```
 
 2. Install the dependecies/ required Modules:
 
-```bash
-npm install
-# If you installed Node Package Manager (npm)
-```
+    ```bash
+    npm install
+    # If you installed Node Package Manager (npm)
+    ```
 
-```bash
-yarn install
-# If you installed Yarn on your computer
-```
+    ```bash
+    yarn install
+    # If you installed Yarn on your computer
+    ```
 
 3. Configure the environment file:
 
-```bash
-touch .env
-```
+    ```bash
+    # CONTENTS OF .ENV FILE
+    FRONTEND_URL="*" # FRONT URL
+    PORT=5000   # BACKEND PORT
 
-```bash
-# CONTENTS OF .ENV FILE
-FRONTEND_URL="*" # FRONT URL
-PORT=5000   # BACKEND PORT
+    # DataBase Variables
+    DB_USERNAME="<username-under-which-the-database-exists>"
+    DB_PASSWORD="<corresponding-password>"
+    DB_HOST="<url-of-where-the-database-is-hosted>"
+    DB_PORT=<port-on-which-database-is-listening>
+    DB_NAME="<name-of-the-database>"
 
-# DataBase Variables
-DB_USERNAME="<username-under-which-the-database-exists>"
-DB_PASSWORD="<corresponding-password>"
-DB_HOST="<url-of-where-the-database-is-hosted>"
-DB_PORT=<port-on-which-database-is-listening>
-DB_NAME="<name-of-the-database>"
+    # JWT variables
+    JWT_SECRET="<jwt-secret-used-to-sign-authentication-tokens>"
+    TOKEN_LIFE="<time-period-after-which-token-expires>"
+    ```
 
-# JWT variables
-JWT_SECRET="<jwt-secret-used-to-sign-authentication-tokens>"
-TOKEN_LIFE="<time-period-after-which-token-expires>"
-```
+    > You can alternately use the `.env.sample` file present in the root for development process by renaming it to `.env`.
 
-```bash
-# EXAMPLE .ENV FILE
-FRONTEND_URL="*"
-PORT=5000
-
-DB_USERNAME="postgres"
-DB_PASSWORD="admin"
-DB_HOST="localhost"
-DB_PORT=5432
-DB_NAME="SplitwiseDB"
-
-JWT_SECRET="SOME SECRET"
-TOKEN_LIFE="365d"
-```
+    > NOTE THAT THE VALUES OF ENVIRONMENT VARIABLES IN `.env.sample` ARE FOR LOCAL DEVELOPMENT SERVER AND NOT VALID/SECURE FOR DEPLOYED SERVER APPLICATION.
 
 4. Run the Project:
 
-```bash
-npm run start
-```
+    ```bash
+    npm run start
+    ```
 
-```bash
-yarn start
-```
+    ```bash
+    yarn start
+    ```
 
 ## Endpoints
 
