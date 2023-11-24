@@ -100,3 +100,9 @@ Currently, following are the existing endpoints:
 - _(GET) **/api/group/:groupId**_: get details of the group with ID groupId if authenticated user belonging to that group.
 - _(PUT) **/api/group/update/:groupId**_: Update group details if authenticated user belongs to that group.
 - _(DELETE) **/api/group/delete/:groupId**_: Delete the group if authenticated user belongs to that group.
+
+### Transaction Endpoints
+
+- _(POST) **/api/transaction/addtx**_: Create and a new Transaction
+- _(GET) **/api/transaction/:txId**_: fetch details of a particular transaction, identified by its ID
+- _(DELETE) **/api/transaction/delete/:txId**_: Delete a transaction identifying by its ID

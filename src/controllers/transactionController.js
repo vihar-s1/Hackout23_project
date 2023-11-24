@@ -69,4 +69,76 @@ const createTransaction = async (req, res) => {
     }
 }
 
-module.exports = {createTransaction}
+const getTransactionById = async (req, res) => {                    
+    // get a specific transaction by ID
+    const dbTransaction = await seq.transaction();
+    try{
+        const {txId} = req.query;
+        const tx = await Transaction.findByPk(txId);
+
+        if (tx.senderEmail == req.user.email)
+            return res.status(200).json({success: true, transaction: tx});
+
+        const isRecipient = await TransactionRecipient.findOne({
+            where: {
+                transactionId: txId,
+                userEmail: req.user.email
+            }
+        })
+        if (isRecipient)
+            return res.status(200).json({success: true, transaction: tx});
+
+        return res.status(403).json({ success: false, errors: ["Access Denied"] })
+    }
+    catch (error){
+        console.log(error.name)
+        console.log(error.message)
+        console.log("________________________________")
+        await dbTransaction.rollback();
+        return res.status(500).json({ success: false, errors: ['Internal Server Error'] });
+    }
+}
+
+const deleteTransaction = async (req, res) => {
+    // delete a transaction by ID
+    const dbTransaction = await sequelize.transaction();
+  
+    try {
+      const { txId } = req.query;
+  
+      // Fetch the transaction by ID
+      const transaction = await Transaction.findByPk(txId, { transaction: dbTransaction });
+  
+      if (!transaction) {
+        await dbTransaction.rollback();
+        return res.status(404).json({ success: false, errors: ['Transaction not found'] });
+      }
+  
+      // Check if the requester has access to delete this transaction
+      const userEmail = req.user.email;
+      if (transaction.senderEmail !== userEmail) {
+        await dbTransaction.rollback();
+        return res.status(403).json({ success: false, errors: ['Access denied'] });
+      }
+  
+      // Perform the deletion operation
+      await transaction.destroy({ transaction: dbTransaction });
+  
+      // Commit the transaction
+      await dbTransaction.commit();
+  
+      return res.status(200).json({ success: true, message: 'Transaction deleted successfully' });
+    } catch (error) {
+      console.log(error.name);
+      console.log(error.message);
+      console.log('________________________________');
+  
+      // Rollback the transaction on error
+      await dbTransaction.rollback();
+  
+      return res.status(500).json({ success: false, errors: ['Internal Server Error'] });
+    }
+  };
+  
+
+module.exports = {createTransaction, getTransactionById, deleteTransaction}
